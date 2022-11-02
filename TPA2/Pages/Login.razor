@@ -1,0 +1,24 @@
+﻿@page "/login"
+
+@inherits LoginModel
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h1>Login</h1>
+        
+        <EditForm Model="LoginData" OnValidSubmit="LoginAsync">
+            <DataAnnotationsValidator />
+            <ValidationSummary/>
+
+            <label for="username">UserName</label>
+            <InputText id="username" @bind-Value="LoginData.UserName" @oninput="ChangeInput" class="form-control" />
+            <label for="password">Password</label>
+            <InputText id="password" type="password" @bind-Value="LoginData.Password" @oninput="ChangeInput" class="form-control" />
+            
+            <p class="my-4">
+                <button type="submit" class="btn btn-primary">Log In</button>
+            </p>
+        </EditForm>
+        <h6 class="text-danger">@LoginStatus</h6>
+    </div>
+</div>

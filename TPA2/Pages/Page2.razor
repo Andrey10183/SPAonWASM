@@ -1,0 +1,45 @@
+﻿@page "/page2"
+@using Blazored.LocalStorage
+@using TPA2.Utility;
+
+<h1>Administrator Page</h1>
+
+This page accessible for autorized as administrator users only.
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>UserName</th>
+            <th>Password</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var token in tokenList)
+        {
+            <tr>
+                <td>@token.UserName</td>
+                <td>@token.AccessToken</td>
+                <td>@token.Role</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    [Inject] public ILocalStorageService LocalStorageService { get; set; }
+
+    private List<SecurityToken> tokenList = new List<SecurityToken>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        var keys = await LocalStorageService.KeysAsync();
+
+        foreach (var key in keys)
+        {
+            var token = await LocalStorageService.GetItemAsync<SecurityToken>(key);
+            tokenList.Add(Crypting.EncryptDecryptToken(token));
+        }
+    }
+}

@@ -1,0 +1,56 @@
+﻿@using System.Security.Claims
+@using TPA2.Utility
+@inherits LayoutComponentBase
+@inject SeedingUserData seed
+@inject AuthenticationStateProvider authStateProvider
+
+<div class="page">
+    <AuthorizeView>
+        <Authorized>
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <RedirectToLogin />
+        </NotAuthorized>
+    </AuthorizeView>
+    
+
+    <main>
+        <AuthorizeView>
+            <Authorized>
+                <div class="top-row px-4">
+                    <div style="text-align:left;"> 
+                        <a>Welcome @context?.User?.Identity?.Name</a>
+                    </div>
+                    <div style="width:70px;text-align:right;">                
+                       <button class="btn btn-sm btn-danger" @onclick="LogOut">Logout</button>
+                    </div>
+                </div>
+                
+            </Authorized>
+            <NotAuthorized>
+                <div class="top-row px-4">
+                    <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code
+{
+    protected override Task OnInitializedAsync() => seed.SeedData();
+
+    private void LogOut()
+    {
+        var tap = (TokenAuthenticationStateProvider)authStateProvider;
+
+        tap.SetAuthenticationState(null);
+    }
+}

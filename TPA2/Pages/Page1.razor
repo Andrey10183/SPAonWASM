@@ -1,0 +1,15 @@
+﻿@page "/page1"
+@page "/"
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+
+<h1>Public Page</h1>
+
+This page can be visited by all authenticated users.
+
+<AuthorizeView>
+    <Authorized>
+        Welcom: @context?.User?.Identity?.Name !
+    </Authorized>
+</AuthorizeView>
+
